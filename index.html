@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏍️ Adventure of Mandalika - Lombok Tengah Adventure</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .game-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .game-header h1 {
+            font-size: 2rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+        }
+
+        .game-header p {
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* Main Container */
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+
+        /* Map Area */
+        .map-section {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .map-title {
+            color: #ffd700;
+            font-size: 1.2rem;
+        }
+
+        .location-badge {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Game Map */
+        .game-map {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 30%, #228B22 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 4px solid #4a4a6a;
+        }
+
+        /* Road */
+        .road {
+            position: absolute;
+            background: #555;
+            border: 2px dashed #fff;
+        }
+
+        .road.main {
+            width: 100%;
+            height: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .road.vertical {
+            width: 40px;
+            height: 100%;
+            left: 30%;
+        }
+
+        .road.diagonal {
+            width: 60px;
+            height: 100%;
+            transform: rotate(-30deg);
+            left: 60%;
+        }
+
+        /* Locations */
+        .location {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .location:hover {
+            transform: scale(1.1);
+            filter: brightness(1.2);
+        }
+
+        .location-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 3px solid #ffd700;
+        }
+
+        .location-icon.visited {
+            border-color: #27ae60;
+            background: #d5f5e3;
+        }
+
+        .location-icon.current {
+            border-color: #e74c3c;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(231, 76, 60, 0); }
+        }
+
+        .location-name {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        /* Player */
+        .player {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .player-bike {
+            width: 100%;
+            height: 100%;
+            font-size: 2.5rem;
+            animation: bikeMove 0.5s infinite;
+        }
+
+        @keyframes bikeMove {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        /* Restaurant Marker */
+        .restaurant {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 4;
+            animation: bounce 2s infinite;
+        }
+
+        .restaurant.collected {
+            background: #27ae60;
+            animation: none;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .restaurant-label {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+
+        /* Circuit Track */
+        .circuit {
+            position: absolute;
+            width: 200px;
+            height: 120px;
+            border: 8px solid #333;
+            border-radius: 50%;
+            background: #444;
+            top: 15%;
+            right: 10%;
+        }
+
+        .circuit::before {
+            content: '🏁 MANDALIKA CIRCUIT';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: #ffd700;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .circuit-flag {
+            position: absolute;
+            top: 50%;
+            left: -5px;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        /* Side Panel */
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel-card {
+            background: #1a1a2e;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .panel-title {
+            color: #ffd700;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4a4a6a;
+        }
+
+        /* Tax Info */
+        .tax-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .tax-stat:last-child {
+            border-bottom: none;
+        }
+
+        .tax-label {
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .tax-value {
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .tax-value.money {
+            color: #27ae60;
+        }
+
+        .tax-value.target {
+            color: #e74c3c;
+        }
+
+        .tax-value.paid {
+            color: #f39c12;
+        }
+
+        /* Progress */
+        .progress-section {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            background: #333;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            height: 100%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Task List */
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .task-item.completed {
+            color: #27ae60;
+            text-decoration: line-through;
+        }
+
+        .task-icon {
+            width: 25px;
+            height: 25px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .task-item.completed .task-icon {
+            background: #27ae60;
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .control-btn.up { grid-column: 2; }
+        .control-btn.left { grid-column: 1; grid-row: 2; }
+        .control-btn.down { grid-column: 2; grid-row: 2; }
+        .control-btn.right { grid-column: 3; grid-row: 2; }
+
+        /* Action Button */
+        .action-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .action-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Message Box */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            padding: 30px;
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+            display: none;
+        }
+
+        .message-box.show {
+            display: block;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .message-title {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .message-content {
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .message-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .message-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Circuit Mini Game */
+        .circuit-game {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a2e;
+            border: 4px solid #ffd700;
+            border-radius: 20px;
+            padding: 30px;
+            z-index: 1001;
+            text-align: center;
+            width: 500px;
+            display: none;
+        }
+
+        .circuit-game.show {
+            display: block;
+        }
+
+        .circuit-track {
+            width: 100%;
+            height: 200px;
+            background: #333;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .circuit-road {
+            position: absolute;
+            width: 100%;
+            height: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #555;
+            border-top: 3px dashed #fff;
+            border-bottom: 3px dashed #fff;
+        }
+
+        .circuit-player {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            font-size: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 20px;
+            transition: left 0.1s;
+        }
+
+        .circuit-obstacle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            font-size: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .speed-bar {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .speed-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #f1c40f, #e74c3c);
+            transition: width 0.1s;
+        }
+
+        .lap-info {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .start-title {
+            font-size: 3rem;
+            color: #ffd700;
+            text-shadow: 4px 4px 0 #b8860b;
+            margin-bottom: 10px;
+        }
+
+        .start-subtitle {
+            color: #aaa;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .start-locations {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .start-location {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .start-location-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .start-location-name {
+            font-size: 0.8rem;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .instructions {
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Win Screen */
+        .win-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .win-screen.show {
+            display: flex;
+        }
+
+        .win-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        .win-stats {
+            background: rgba(0,0,0,0.2);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .win-stat {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        .restart-btn {
+            background: white;
+            color: #27ae60;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .game-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-map {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .game-header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .game-map {
+                height: 350px;
+            }
+            
+            .location-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3rem;
+            }
+            
+            .restaurant {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+        <h1 class="start-title">🏍️ ADVENTURE OF MANDALIKA</h1>
+        <p class="start-subtitle">Petualangan Pajak Lombok Tengah 2026</p>
+        
+        <div class="start-locations">
+            <div class="start-location">
+                <div class="start-location-icon">✈️</div>
+                <div class="start-location-name">Bandara Lombok<br>START</div>
+            </div>
+            <div class="start-location">
+                <div class="start-location-icon">🏍️</div>
+                <div class="start-location-name">Sirkuit Mandalika<br>Balap Motor</div>
+            </div>
+            <div class="start-location">
+                <div class="start-location-icon">🍽️</div>
+                <div class="start-location-name">10 Restoran<br>Kumpulkan Pajak</div>
+            </div>
+            <div class="start-location">
+                <div class="start-location-icon">🏛️</div>
+                <div class="start-location-name">Kantor Bupati<br>FINISH</div>
+            </div>
+        </div>
+        
+        <button class="start-btn" onclick="startGame()">🎮 MULAI PERJALANAN</button>
+        
+        <div class="instructions">
+            <p>📋 Tugas: Kumpulkan pajak dari 10 restoran & selesaikan balap di Sirkuit Mandalika</p>
+            <p>🏁 Finish di Kantor Bupati Lombok Tengah dan setorkan ke BAPENDA</p>
+            <p>⌨️ Gunakan WASD atau tombol untuk bergerak</p>
+        </div>
+    </div>
+
+    <!-- Win Screen -->
+    <div class="win-screen" id="winScreen">
+        <h1 class="win-title">🎉 SELAMAT! 🎉</h1>
+        <p style="font-size: 1.5rem; margin-bottom: 20px;">Petualangan Selesai!</p>
+        
+        <div class="win-stats">
+            <div class="win-stat">💰 Total Pajak Dikumpulkan: <strong id="totalTaxWin">Rp 0</strong></div>
+            <div class="win-stat">🍽️ Restoran Dikunjungi: <strong id="restaurantsWin">0/10</strong></div>
+            <div class="win-stat">🏁 Lomba Balap: <strong>SELESAI</strong></div>
+            <div class="win-stat">🏆 Total Pajak Disetorkan: <strong id="finalTaxWin">Rp 0</strong></div>
+        </div>
+        
+        <button class="restart-btn" onclick="restartGame()">🔄 Main Lagi</button>
+    </div>
+
+    <!-- Game Header -->
+    <header class="game-header">
+        <h1>🏍️ ADVENTURE OF MANDALIKA</h1>
+        <p>Kumpulkan Pajak dari 10 Restoran & Selesaikan Balap di Sirkuit Mandalika!</p>
+    </header>
+
+    <!-- Main Game Container -->
+    <div class="game-container">
+        <!-- Map Section -->
+        <div class="map-section">
+            <div class="map-header">
+                <span class="map-title">🗺️ PETA LOMBOK TENGAH</span>
+                <span class="location-badge" id="currentLocation">📍 Mulai dari Bandara</span>
+            </div>
+            
+            <div class="game-map" id="gameMap">
+                <!-- Roads -->
+                <div class="road main"></div>
+                <div class="road vertical"></div>
+                
+                <!-- Circuit -->
+                <div class="circuit">
+                    <span class="circuit-flag">🏁</span>
+                </div>
+                
+                <!-- Player -->
+                <div class="player" id="player">
+                    <span class="player-bike">🏍️</span>
+                </div>
+                
+                <!-- Locations -->
+                <div class="location" id="loc-bandara" style="left: 5%; top: 45%;" onclick="goToLocation('bandara')">
+                    <div class="location-icon" id="icon-bandara">
+                        ✈️
+                    </div>
+                    <span class="location-name">Bandara Lombok</span>
+                </div>
+                
+                <div class="location" id="loc-poltekpar" style="left: 18%; top: 20%;" onclick="goToLocation('poltekpar')">
+                    <div class="location-icon" id="icon-poltekpar">
+                        🎓
+                    </div>
+                    <span class="location-name">Poltekpar</span>
+                </div>
+                
+                <div class="location" id="loc-ipdn" style="left: 18%; top: 70%;" onclick="goToLocation('ipdn')">
+                    <div class="location-icon" id="icon-ipdn">
+                        🏛️
+                    </div>
+                    <span class="location-name">Kampus IPDN</span>
+                </div>
+                
+                <div class="location" id="loc-mandalika" style="right: 8%; top: 15%;" onclick="goToLocation('mandalika')">
+                    <div class="location-icon" id="icon-mandalika">
+                        🏍️
+                    </div>
+                    <span class="location-name">Sirkuit Mandalika</span>
+                </div>
+                
+                <div class="location" id="loc-pantai" style="right: 25%; top: 35%;" onclick="goToLocation('pantai')">
+                    <div class="location-icon" id="icon-pantai">
+                        🏖️
+                    </div>
+                    <span class="location-name">Pantai Mandalika</span>
+                </div>
+                
+                <div class="location" id="loc-sukerare" style="left: 45%; top: 10%;" onclick="goToLocation('sukerare')">
+                    <div class="location-icon" id="icon-sukerare">
+                        🧵
+                    </div>
+                    <span class="location-name">Desa Tenun Sukerare</span>
+                </div>
+                
+                <div class="location" id="loc-bupati" style="right: 8%; bottom: 10%;" onclick="goToLocation('bupati')">
+                    <div class="location-icon" id="icon-bupati">
+                        🏛️
+                    </div>
+                    <span class="location-name">Kantor Bupati</span>
+                </div>
+                
+                <div class="location" id="loc-bapenda" style="right: 20%; bottom: 10%;" onclick="goToLocation('bapenda')">
+                    <div class="location-icon" id="icon-bapenda">
+                        💼
+                    </div>
+                    <span class="location-name">Kantor BAPENDA</span>
+                </div>
+                
+                <!-- Restaurants (10 locations) -->
+                <div class="restaurant" id="resto-1" style="left: 12%; top: 50%;" onclick="collectTax(1, 'RM Seafood Jaya', 150000)">
+                    <span>🍽️</span>
+                    <span class="restaurant-label">RM 1</span>
+                </div>
+                
+                <div class="restaurant" id="resto-2" style="left: 25%; top: 35%;" onclick="collectTax(2, 'Warung Nusantara', 85000)">
+                    <span>🍴</span>
+                    <span class="restaurant-label">RM 2</span>
+                </div>
+                
+                <div class="restaurant" id="resto-3" style="left: 35%; top: 55%;" onclick="collectTax(3, 'Kedai Kopi Lombok', 45000)">
+                    <span>☕</span>
+                    <span class="restaurant-label">RM 3</span>
+                </div>
+                
+                <div class="restaurant" id="resto-4" style="left: 50%; top: 30%;" onclick="collectTax(4, 'Restaurant Senggigi', 200000)">
+                    <span>🍲</span>
+                    <span class="restaurant-label">RM 4</span>
+                </div>
+                
+                <div class="restaurant" id="resto-5" style="left: 40%; top: 70%;" onclick="collectTax(5, 'Pondok Terrace', 120000)">
+                    <span>🏠</span>
+                    <span class="restaurant-label">RM 5</span>
+                </div>
+                
+                <div class="restaurant" id="resto-6" style="right: 35%; top: 25%;" onclick="collectTax(6, 'Beach Club Cafe', 175000)">
+                    <span>🏖️</span>
+                    <span class="restaurant-label">RM 6</span>
+                </div>
+                
+                <div class="restaurant" id="resto-7" style="right: 40%; top: 55%;" onclick="collectTax(7, 'Rumah Makan Padang', 95000)">
+                    <span>🍛</span>
+                    <span class="restaurant-label">RM 7</span>
+                </div>
+                
+                <div class="restaurant" id="resto-8" style="right: 15%; top: 70%;" onclick="collectTax(8, 'Bebek Goreng HH', 135000)">
+                    <span>🦆</span>
+                    <span class="restaurant-label">RM 8</span>
+                </div>
+                
+                <div class="restaurant" id="resto-9" style="left: 55%; top: 85%;" onclick="collectTax(9, 'Ayam Geprek Prima', 55000)">
+                    <span>🍗</span>
+                    <span class="restaurant-label">RM 9</span>
+                </div>
+                
+                <div class="restaurant" id="resto-10" style="left: 70%; top: 45%;" onclick="collectTax(10, 'Seafood Segar', 250000)">
+                    <span>🦐</span>
+                    <span class="restaurant-label">RM 10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+            <!-- Tax Info -->
+            <div class="panel-card">
+                <h3 class="panel-title">💰 INFORMASI PAJAK</h3>
+                
+                <div class="tax-stat">
+                    <span class="tax-label">Pajak dari Restoran:</span>
+                    <span class="tax-value money" id="taxFromRestaurants">Rp 0</span>
+                </div>
+                
+                <div class="tax-stat">
+                    <span class="tax-label">Pajak Balap Mandalika:</span>
+                    <span class="tax-value paid" id="taxFromRace">Rp 0</span>
+                </div>
+                
+                <div class="tax-stat">
+                    <span class="tax-label">💵 TOTAL PAJAK:</span>
+                    <span class="tax-value money" id="totalTax">Rp 0</span>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="tax-label">📊 Progress Restoran</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="restaurantProgress">0/10</div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <div class="tax-label">🏍️ Status Balap</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="raceProgress" style="background: linear-gradient(90deg, #e74c3c, #c0392b);">
+                            BELUM
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Task List -->
+            <div class="panel-card">
+                <h3 class="panel-title">📋 TUGAS PERJALANAN</h3>
+                <ul class="task-list">
+                    <li class="task-item" id="task-race">
+                        <span class="task-icon">🏁</span>
+                        <span>Selesaikan Balap di Mandalika</span>
+                    </li>
+                    <li class="task-item" id="task-restaurants">
+                        <span class="task-icon">🍽️</span>
+                        <span>Kumpulkan Pajak dari 10 Restoran</span>
+                    </li>
+                    <li class="task-item" id="task-bapenda">
+                        <span class="task-icon">💼</span>
+                        <span>Setorkan Pajak ke BAPENDA</span>
+                    </li>
+                    <li class="task-item" id="task-finish">
+                        <span class="task-icon">🏆</span>
+                        <span>Arrive di Kantor Bupati</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Controls -->
+            <div class="panel-card">
+                <h3 class="panel-title">🎮 KONTROL</h3>
+                <div class="controls">
+                    <button class="control-btn up" onclick="movePlayer('up')">⬆️</button>
+                    <button class="control-btn left" onclick="movePlayer('left')">⬅️</button>
+                    <button class="control-btn down" onclick="movePlayer('down')">⬇️</button>
+                    <button class="control-btn right" onclick="movePlayer('right')">➡️</button>
+                </div>
+                
+                <button class="action-btn" id="actionBtn" onclick="doAction()">
+                    🚶 AKSI
+                </button>
+            </div>
+
+            <!-- Legend -->
+            <div class="panel-card">
+                <h3 class="panel-title">📍 LEGENDA</h3>
+                <div style="color: #aaa; font-size: 0.8rem; line-height: 1.8;">
+                    <p>✈️ Bandara Lombok (Start)</p>
+                    <p>🏍️ Sirkuit Mandalika (Balap)</p>
+                    <p>🍽️ Restoran (Kumpulkan Pajak)</p>
+                    <p>🏛️ Kantor Bupati (Finish)</p>
+                    <p>💼 Kantor BAPENDA (Setor Pajak)</p>
+                    <p>🧵 Desa Tenun Sukerare</p>
+                    <p>🏖️ Pantai Mandalika</p>
+                    <p>🎓 Poltekpar & IPDN</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box -->
+    <div class="overlay" id="overlay"></div>
+    <div class="message-box" id="messageBox">
+        <h2 class="message-title" id="messageTitle">Pesan</h2>
+        <p class="message-content" id="messageContent">Konten pesan</p>
+        <button class="message-btn" onclick="closeMessage()">OK</button>
+    </div>
+
+    <!-- Circuit Mini Game -->
+    <div class="circuit-game" id="circuitGame">
+        <h2 class="message-title">🏍️ BALAP MANDALIKA 🏍️</h2>
+        <p class="message-content">Tekan SPACE untuk躲开 obstacles dan finish 3 lap!</p>
+        
+        <div class="lap-info">
+            Lap: <span id="currentLap">1</span>/3 | Waktu: <span id="raceTime">0.0</span>s
+        </div>
+        
+        <div class="circuit-track">
+            <div class="circuit-road"></div>
+            <div class="circuit-player" id="circuitPlayer">🏍️</div>
+            <div id="obstacles"></div>
+        </div>
+        
+        <div class="speed-bar">
+            <div class="speed-fill" id="speedFill" style="width: 50%;"></div>
+        </div>
+        
+        <p style="color: #ffd700;">Tekan SPASI atau klik untuk dodge obstacle!</p>
+        <button class="message-btn" onclick="closeCircuitGame()">❌ Batal</button>
+    </div>
+
+    <script>
+        // Game State
+        let playerX = 8;
+        let playerY = 48;
+        let totalTax = 0;
+        let taxFromRestaurants = 0;
+        let taxFromRace = 0;
+        let restaurantsCollected = 0;
+        let raceCompleted = false;
+        let gameStarted = false;
+
+        const locationCoords = {
+            bandara: { x: 5, y: 45 },
+            poltekpar: { x: 18, y: 20 },
+            ipdn: { x: 18, y: 70 },
+            mandalika: { x: 85, y: 15 },
+            pantai: { x: 70, y: 35 },
+            sukerare: { x: 45, y: 10 },
+            bupati: { x: 85, y: 85 },
+            bapenda: { x: 70, y: 85 }
+        };
+
+        let currentLocation = 'bandara';
+
+        // Initialize
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            gameStarted = true;
+            updatePlayerPosition();
+            showMessage('🏍️ ADVENTURE OF MANDALIKA', 
+                'Selamat datang di Lombok Tengah!<br><br>' +
+                '📋 <strong>Tugas Anda:</strong><br>' +
+                '1. Kumpulkan pajak dari <strong>10 restoran</strong><br>' +
+                '2. Ikuti <strong>balap motor</strong> di Sirkuit Mandalika<br>' +
+                '3. <strong>Setorkan pajak</strong> ke Kantor BAPENDA<br>' +
+                '4. <strong>Finish</strong> di Kantor Bupati Lombok Tengah<br><br>' +
+                '🏁 Gunakan tombol atau WASD untuk bergerak!');
+        }
+
+        function restartGame() {
+            location.reload();
+        }
+
+        // Player Movement
+        function movePlayer(direction) {
+            if (!gameStarted) return;
+            
+            const step = 3;
+            
+            switch(direction) {
+                case 'up': playerY = Math.max(5, playerY - step); break;
+                case 'down': playerY = Math.min(90, playerY + step); break;
+                case 'left': playerX = Math.max(3, playerX - step); break;
+                case 'right': playerX = Math.min(92, playerX + step); break;
+            }
+            
+            updatePlayerPosition();
+            checkProximity();
+        }
+
+        function updatePlayerPosition() {
+            const player = document.getElementById('player');
+            player.style.left = playerX + '%';
+            player.style.top = playerY + '%';
+        }
+
+        // Keyboard Controls
+        document.addEventListener('keydown', function(e) {
+            if (!gameStarted) return;
+            
+            switch(e.key.toLowerCase()) {
+                case 'w': case 'arrowup': movePlayer('up'); break;
+                case 's': case 'arrowdown': movePlayer('down'); break;
+                case 'a': case 'arrowleft': movePlayer('left'); break;
+                case 'd': case 'arrowright': movePlayer('right'); break;
+                case 'e': case 'enter': doAction(); break;
+            }
+        });
+
+        // Check Proximity to Locations
+        function checkProximity() {
+            const map = document.getElementById('gameMap');
+            const mapRect = map.getBoundingClientRect();
+            
+            for (const [loc, coords] of Object.entries(locationCoords)) {
+                const distance = Math.sqrt(Math.pow(playerX - coords.x, 2) + Math.pow(playerY - coords.y, 2));
+                
+                if (distance < 8) {
+                    document.getElementById('currentLocation').textContent = getLocationName(loc);
+                    currentLocation = loc;
+                    
+                    // Highlight current location
+                    document.querySelectorAll('.location-icon').forEach(icon => {
+                        icon.classList.remove('current');
+                    });
+                    const icon = document.getElementById('icon-' + loc);
+                    if (icon) icon.classList.add('current');
+                    
+                    return;
+                }
+            }
+            
+            // Check restaurants
+            for (let i = 1; i <= 10; i++) {
+                const resto = document.getElementById('resto-' + i);
+                const restoX = parseFloat(resto.style.left);
+                const restoY = parseFloat(resto.style.top);
+                const distance = Math.sqrt(Math.pow(playerX - restoX, 2) + Math.pow(playerY - restoY, 2));
+                
+                if (distance < 8) {
+                    document.getElementById('currentLocation').textContent = '🍽️ Restoran (' + i + '/10)';
+                    return;
+                }
+            }
+        }
+
+        function getLocationName(loc) {
+            const names = {
+                bandara: '✈️ Bandara Lombok',
+                poltekpar: '🎓 Poltekpar',
+                ipdn: '🏛️ Kampus IPDN',
+                mandalika: '🏍️ Sirkuit Mandalika',
+                pantai: '🏖️ Pantai Mandalika',
+                sukerare: '🧵 Desa Tenun Sukerare',
+                bupati: '🏛️ Kantor Bupati',
+                bapenda: '💼 Kantor BAPENDA'
+            };
+            return names[loc] || loc;
+        }
+
+        // Go to Specific Location
+        function goToLocation(loc) {
+            playerX = locationCoords[loc].x;
+            playerY = locationCoords[loc].y;
+            updatePlayerPosition();
+            checkProximity();
+            
+            // Auto action when arriving
+            setTimeout(() => doAction(), 300);
+        }
+
+        // Collect Tax from Restaurant
+        function collectTax(id, name, amount) {
+            if (!gameStarted) return;
+            
+            const resto = document.getElementById('resto-' + id);
+            
+            if (resto.classList.contains('collected')) {
+                showMessage('🍽️ Sudah Dikunjungi', 'Anda sudah mengambil pajak dari ' + name + '!');
+                return;
+            }
+            
+            // Check if player is close enough
+            const restoX = parseFloat(resto.style.left);
+            const restoY = parseFloat(resto.style.top);
+            const distance = Math.sqrt(Math.pow(playerX - restoX, 2) + Math.pow(playerY - restoY, 2));
+            
+            if (distance > 12) {
+                showMessage('⚠️ Terlalu Jauh', 'Mendekatlah ke restoran terlebih dahulu!');
+                return;
+            }
+            
+            resto.classList.add('collected');
+            taxFromRestaurants += amount;
+            restaurantsCollected++;
+            updateTaxDisplay();
+            
+            showMessage('💰 PAJAK DIKUMPULKAN!', 
+                '🎉 Pajak dari <strong>' + name + '</strong><br>' +
+                'Jumlah: <strong>Rp ' + amount.toLocaleString('id-ID') + '</strong><br><br>' +
+                '📊 Total Pajak Restoran: Rp ' + taxFromRestaurants.toLocaleString('id-ID') + '<br>' +
+                '🏪 Restoran Dikunjungi: ' + restaurantsCollected + '/10');
+            
+            if (restaurantsCollected === 10) {
+                document.getElementById('task-restaurants').classList.add('completed');
+                document.getElementById('task-restaurants').querySelector('.task-icon').textContent = '✅';
+            }
+        }
+
+        // Update Tax Display
+        function updateTaxDisplay() {
+            document.getElementById('taxFromRestaurants').textContent = 'Rp ' + taxFromRestaurants.toLocaleString('id-ID');
+            document.getElementById('taxFromRace').textContent = 'Rp ' + taxFromRace.toLocaleString('id-ID');
+            document.getElementById('totalTax').textContent = 'Rp ' + (taxFromRestaurants + taxFromRace).toLocaleString('id-ID');
+            document.getElementById('restaurantProgress').textContent = restaurantsCollected + '/10';
+            document.getElementById('restaurantProgress').style.width = (restaurantsCollected * 10) + '%';
+        }
+
+        // Do Action based on current location
+        function doAction() {
+            if (!gameStarted) return;
+            
+            switch(currentLocation) {
+                case 'mandalika':
+                    if (!raceCompleted) {
+                        startCircuitGame();
+                    } else {
+                        showMessage('🏍️ Sirkuit Mandalika', 
+                            'Anda sudah menyelesaikan balap di Mandalika!<br>' +
+                            'Pajak Balap: Rp ' + taxFromRace.toLocaleString('id-ID'));
+                    }
+                    break;
+                    
+                case 'bapenda':
+                    if (taxFromRestaurants + taxFromRace > 0) {
+                        const taxToPay = taxFromRestaurants + taxFromRace;
+                        showMessage('💼 MENYETOR PAJAK', 
+                            '💰 Total Pajak: <strong>Rp ' + taxToPay.toLocaleString('id-ID') + '</strong><br><br>' +
+                            '✅ Pajak berhasil disetorkan ke BAPENDA!<br><br>' +
+                            'Sekarang menuju Kantor Bupati untuk menyelesaikan misi!');
+                        
+                        document.getElementById('task-bapenda').classList.add('completed');
+                        document.getElementById('task-bapenda').querySelector('.task-icon').textContent = '✅';
+                    } else {
+                        showMessage('💼 Kantor BAPENDA', 
+                            'Belum ada pajak untuk disetorkan.<br>' +
+                            'Kumpulkan pajak dari restoran dan selesaikan balap terlebih dahulu!');
+                    }
+                    break;
+                    
+                case 'bupati':
+                    if (document.getElementById('task-bapenda').classList.contains('completed')) {
+                        // WIN!
+                        winGame();
+                    } else {
+                        showMessage('🏛️ Kantor Bupati Lombok Tengah', 
+                            'Selesaikan semua tugas terlebih dahulu:<br>' +
+                            '• Kumpulkan pajak dari 10 restoran<br>' +
+                            '• Ikuti balap di Sirkuit Mandalika<br>' +
+                            '• Setorkan pajak ke BAPENDA');
+                    }
+                    break;
+                    
+                default:
+                    showMessage(getLocationName(currentLocation), 
+                        'Anda berada di ' + getLocationName(currentLocation) + '<br><br>' +
+                        '📍 Lokasi terkenal di Lombok Tengah!<br>' +
+                        'Lanjutkan perjalanan Anda.');
+            }
+        }
+
+        // Circuit Mini Game
+        let raceInterval;
+        let obstacleInterval;
+        let currentLap = 1;
+        let raceTime = 0;
+        let playerSpeed = 0;
+        let obstacles = [];
+        let gameRunning = false;
+
+        function startCircuitGame() {
+            if (raceCompleted) {
+                showMessage('🏍️ Mandalika Circuit', 'Anda sudah menyelesaikan balap!');
+                return;
+            }
+            
+            document.getElementById('circuitGame').classList.add('show');
+            document.getElementById('overlay').classList.add('show');
+            
+            currentLap = 1;
+            raceTime = 0;
+            playerSpeed = 0;
+            obstacles = [];
+            gameRunning = true;
+            
+            document.getElementById('currentLap').textContent = currentLap;
+            document.getElementById('raceTime').textContent = '0.0';
+            document.getElementById('obstacles').innerHTML = '';
+            document.getElementById('circuitPlayer').style.left = '20px';
+            
+            // Start race
+            raceInterval = setInterval(() => {
+                raceTime += 0.1;
+                document.getElementById('raceTime').textContent = raceTime.toFixed(1);
+                
+                // Move player forward
+                let playerLeft = parseFloat(document.getElementById('circuitPlayer').style.left) || 20;
+                playerLeft += 2;
+                
+                // Check if lap completed
+                if (playerLeft > 460) {
+                    playerLeft = 20;
+                    currentLap++;
+                    document.getElementById('currentLap').textContent = currentLap;
+                    
+                    if (currentLap > 3) {
+                        finishRace();
+                    }
+                }
+                
+                document.getElementById('circuitPlayer').style.left = playerLeft + 'px';
+                
+                // Check collision
+                checkObstacleCollision(playerLeft);
+                
+            }, 50);
+            
+            // Spawn obstacles
+            obstacleInterval = setInterval(() => {
+                if (gameRunning && Math.random() > 0.7) {
+                    spawnObstacle();
+                }
+            }, 1000);
+            
+            // Space to dodge
+            document.addEventListener('keydown', dodgeKey);
+            document.getElementById('circuitTrack')?.addEventListener('click', dodgeClick);
+        }
+
+        function spawnObstacle() {
+            const obstacle = document.createElement('div');
+            obstacle.className = 'circuit-obstacle';
+            obstacle.style.left = (Math.random() > 0.5 ? '20px' : '35px');
+            obstacle.style.top = '50%';
+            obstacle.style.transform = 'translateY(-50%)';
+            obstacle.textContent = Math.random() > 0.5 ? '🛡️' : '⚠️';
+            
+            document.getElementById('obstacles').appendChild(obstacle);
+            
+            let pos = parseFloat(obstacle.style.left);
+            const moveObstacle = setInterval(() => {
+                pos += 5;
+                obstacle.style.left = pos + 'px';
+                
+                if (pos > 460) {
+                    clearInterval(moveObstacle);
+                    obstacle.remove();
+                }
+            }, 30);
+        }
+
+        function dodgeKey(e) {
+            if (e.code === 'Space' && gameRunning) {
+                e.preventDefault();
+                dodgeUp();
+            }
+        }
+
+        function dodgeClick() {
+            if (gameRunning) dodgeUp();
+        }
+
+        function dodgeUp() {
+            const player = document.getElementById('circuitPlayer');
+            player.style.top = '25%';
+            player.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                player.style.top = '50%';
+                player.style.transform = 'translateY(-50%)';
+            }, 500);
+        }
+
+        function checkObstacleCollision(playerLeft) {
+            const obs = document.querySelectorAll('.circuit-obstacle');
+            obs.forEach(o => {
+                const obsLeft = parseFloat(o.style.left);
+                if (Math.abs(playerLeft - obsLeft) < 25) {
+                    // Collision!
+                    o.remove();
+                    raceTime += 2; // Penalty
+                    document.getElementById('raceTime').textContent = raceTime.toFixed(1);
+                }
+            });
+        }
+
+        function finishRace() {
+            clearInterval(raceInterval);
+            clearInterval(obstacleInterval);
+            gameRunning = false;
+            
+            raceCompleted = true;
+            taxFromRace = 500000; // Bonus tax for completing race
+            
+            document.getElementById('raceProgress').textContent = 'SELESAI ✓';
+            document.getElementById('raceProgress').style.background = 'linear-gradient(90deg, #27ae60, #2ecc71)';
+            document.getElementById('task-race').classList.add('completed');
+            document.getElementById('task-race').querySelector('.task-icon').textContent = '✅';
+            
+            updateTaxDisplay();
+            
+            closeCircuitGame();
+            
+            showMessage('🏁 BALAP SELESAI! 🏆', 
+                '🎉 Selamat! Anda menyelesaikan 3 lap!<br><br>' +
+                '⏱️ Waktu: ' + raceTime.toFixed(1) + ' detik<br>' +
+                '💰 PAJAK BALAP: <strong>Rp 500.000</strong><br><br>' +
+                'Total Pajak Sekarang: <strong>Rp ' + (taxFromRestaurants + taxFromRace).toLocaleString('id-ID') + '</strong><br><br>' +
+                'Sekarang setorkan pajak ke BAPENDA!');
+        }
+
+        function closeCircuitGame() {
+            document.getElementById('circuitGame').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+            clearInterval(raceInterval);
+            clearInterval(obstacleInterval);
+            gameRunning = false;
+        }
+
+        // Win Game
+        function winGame() {
+            const total = taxFromRestaurants + taxFromRace;
+            
+            document.getElementById('totalTaxWin').textContent = 'Rp ' + total.toLocaleString('id-ID');
+            document.getElementById('restaurantsWin').textContent = restaurantsCollected + '/10';
+            document.getElementById('finalTaxWin').textContent = 'Rp ' + total.toLocaleString('id-ID');
+            
+            document.getElementById('winScreen').classList.add('show');
+        }
+
+        // Message Functions
+        function showMessage(title, content) {
+            document.getElementById('messageTitle').textContent = title;
+            document.getElementById('messageContent').innerHTML = content;
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('messageBox').classList.add('show');
+        }
+
+        function closeMessage() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('messageBox').classList.remove('show');
+        }
+
+        // Initialize
+        document.getElementById('overlay').addEventListener('click', closeMessage);
+    </script>
+</body>
+</html>
