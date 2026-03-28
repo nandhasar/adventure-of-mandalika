@@ -36,9 +36,6 @@
             line-height: 1.5;
         }
 
-        /* ============================================
-           SLIDE CONTAINER - UKURAN FIX A4 LANDSCAPE
-           ============================================ */
         .slide {
             width: 297mm;
             height: 210mm;
@@ -56,7 +53,6 @@
             page-break-after: auto;
         }
 
-        /* TOP DECORATIVE BAR */
         .slide::before {
             content: '';
             position: absolute;
@@ -67,9 +63,6 @@
             background: linear-gradient(90deg, var(--green-dark), var(--gold-primary), var(--green-dark));
         }
 
-        /* ============================================
-           HEADER
-           ============================================ */
         .slide-header {
             display: flex;
             justify-content: space-between;
@@ -127,9 +120,6 @@
             margin-top: 2mm;
         }
 
-        /* ============================================
-           COVER SLIDE
-           ============================================ */
         .slide-cover {
             display: flex;
             flex-direction: column;
@@ -233,9 +223,6 @@
             z-index: 1;
         }
 
-        /* ============================================
-           CONTENT
-           ============================================ */
         .slide-content {
             flex: 1;
             display: flex;
@@ -267,9 +254,6 @@
             padding-left: 9mm;
         }
 
-        /* ============================================
-           STATS GRID
-           ============================================ */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -356,9 +340,6 @@
             border-radius: 2mm;
         }
 
-        /* ============================================
-           CHART SECTION
-           ============================================ */
         .chart-section {
             flex: 1;
             display: grid;
@@ -401,9 +382,6 @@
             height: 55mm;
         }
 
-        /* ============================================
-           TAX SLIDE
-           ============================================ */
         .tax-slide-header {
             display: flex;
             align-items: center;
@@ -478,9 +456,6 @@
             flex: 1;
         }
 
-        /* ============================================
-           TABLE
-           ============================================ */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -521,9 +496,6 @@
             background: var(--gold-pale) !important;
         }
 
-        /* ============================================
-           FOOTER
-           ============================================ */
         .slide-footer {
             margin-top: auto;
             padding-top: 5mm;
@@ -540,9 +512,6 @@
             color: var(--green-dark);
         }
 
-        /* ============================================
-           LOADING
-           ============================================ */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -596,25 +565,18 @@
             display: none !important;
         }
 
-        /* ============================================
-           PRINT / PDF STYLES - CRITICAL!
-           ============================================ */
         @media print {
-            /* PAGE SETUP - A4 LANDSCAPE */
             @page {
                 size: A4 landscape;
                 margin: 0;
             }
 
-            /* REMOVE ALL BACKGROUNDS FROM BODY */
             body {
                 background: white !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                color-adjust: exact !important;
             }
 
-            /* EACH SLIDE BECOMES A PAGE */
             .slide,
             .slide-cover {
                 width: 100% !important;
@@ -624,122 +586,30 @@
                 box-shadow: none !important;
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
-                page-break: always !important;
                 overflow: visible !important;
                 background: white !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
             }
 
             .slide:last-child {
                 page-break-after: auto !important;
             }
 
-            /* FORCE ALL COLORS TO PRINT */
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
-                color-adjust: exact !important;
             }
 
-            /* ENSURE GRADIENT BACKGROUNDS PRINT */
-            .slide::before,
-            .slide-cover,
-            .stat-card::before,
-            .tax-summary-item.highlight,
-            .chart-title .icon,
-            .data-table th,
-            .progress-fill,
-            .tax-badge {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-                background-image: none !important;
-                background-color: inherit !important;
-            }
-
-            /* Force solid backgrounds for print */
-            .slide-cover {
-                background: var(--green-dark) !important;
-            }
-
-            .slide::before {
-                background: var(--green-dark) !important;
-            }
-
-            .stat-card::before {
-                background: var(--green-primary) !important;
-            }
-
-            .tax-summary-item.highlight {
-                background: var(--gold-pale) !important;
-            }
-
-            .data-table th {
-                background: var(--green-dark) !important;
-            }
-
-            .progress-fill {
-                background: var(--green-primary) !important;
-            }
-
-            /* HIDE LOADING */
             .loading-overlay {
                 display: none !important;
             }
 
-            /* CHART CONTAINERS */
             .chart-container {
                 height: 50mm !important;
             }
-
-            /* PRINT INSTRUCTIONS */
-            .print-instructions {
-                display: block !important;
-                position: fixed;
-                bottom: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #333;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 5px;
-                font-size: 12px;
-                z-index: 1000;
-            }
-        }
-
-        /* Instructions for printing */
-        .print-instructions {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1B5E20;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 14px;
-            z-index: 1000;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-
-        .print-instructions strong {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 16px;
         }
     </style>
 </head>
 <body>
-    <!-- PRINT INSTRUCTIONS -->
-    <div class="print-instructions" id="printInstructions">
-        <strong>💡 Tips Print PDF:</strong>
-        Tekan <strong>Ctrl + P</strong> (Windows) atau <strong>Cmd + P</strong> (Mac)<br>
-        Pilih: <strong>Landscape</strong> • <strong>A4</strong> • <strong>Background Graphics: ON</strong>
-    </div>
-
     <!-- Loading -->
     <div class="loading-overlay" id="loading">
         <div class="loading-logo">
@@ -890,7 +760,6 @@
     </div>
 
     <script>
-        // ==================== CONFIG ====================
         const SHEET_ID = '1BE7gPYSSlCnaIZ4Q7RvGx_L_2v46fQjkEnK3EC3VQz4';
         const GID_2026 = '0';
         const GID_2025 = '757965445';
@@ -898,7 +767,6 @@
         let data2026 = [];
         let data2025 = [];
 
-        // ==================== FORMATTERS ====================
         function formatRupiahBesar(num) {
             if (num >= 1000000000) {
                 const milyar = num / 1000000000;
@@ -920,7 +788,6 @@
             return num.toLocaleString('id-ID');
         }
 
-        // ==================== FETCH DATA ====================
         async function fetchSheetData(gid) {
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
             const response = await fetch(url);
@@ -986,7 +853,6 @@
             }
         }
 
-        // ==================== CALCULATIONS ====================
         function getMonthTotal(data, monthIndex) {
             return data.reduce((sum, item) => sum + (item.bulan[monthIndex] || 0), 0);
         }
@@ -1005,17 +871,11 @@
             }, 0);
         }
 
-        // ==================== GENERATE SLIDES ====================
         function initSlides() {
             generateOverviewStats();
             generateCharts();
             generateTaxSlides();
             generateSummaryTable();
-            
-            // Show print instructions after load
-            setTimeout(() => {
-                document.getElementById('printInstructions').style.display = 'block';
-            }, 2000);
         }
 
         function generateOverviewStats() {
@@ -1039,7 +899,6 @@
         }
 
         function generateCharts() {
-            // Monthly Bar Chart
             new Chart(document.getElementById('chartMonthly'), {
                 type: 'bar',
                 data: {
@@ -1086,7 +945,6 @@
                 }
             });
 
-            // Comparison Doughnut
             const total2025 = getTotalUntilMonth(data2025, 2);
             const total2026 = getTotalUntilMonth(data2026, 2);
             
@@ -1290,7 +1148,6 @@
             });
         }
 
-        // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
