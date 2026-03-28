@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adinda - AI Assistant</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <defs>
+                                <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#7c3aed"/>
+                                    <stop offset="100%" style="stop-color:#ec4899"/>
+                                </linearGradient>
+                            </defs>
+                            <circle cx="20" cy="20" r="18" stroke="url(#logoGrad)" stroke-width="2.5" fill="none"/>
+                            <circle cx="14" cy="16" r="2" fill="url(#logoGrad)"/>
+                            <circle cx="26" cy="16" r="2" fill="url(#logoGrad)"/>
+                            <path d="M12 26 Q20 32 28 26" stroke="url(#logoGrad)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">Adinda</span>
+                </div>
+                <button class="btn-icon" id="sidebarToggle" title="Toggle Sidebar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <button class="btn-new-chat" id="newChatBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                <span>Obrolan Baru</span>
+            </button>
+
+            <div class="chat-history" id="chatHistory">
+                <!-- Dynamic chat items -->
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="btn-icon" id="todoBtn" title="Todo & Notes">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="settingsBtn" title="Pengaturan">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="themeToggle" title="Toggle Theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-left">
+                    <span class="model-badge" id="modelBadge">
+                        <span class="provider-dot"></span>
+                        <span id="currentModelName">OpenRouter</span>
+                    </span>
+                </div>
+                <div class="header-center">
+                    <h1 class="chat-title" id="chatTitle">Obrolan Baru</h1>
+                </div>
+                <div class="header-right">
+                    <button class="btn-icon" id="skillsBtn" title="Skill Manager">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                            <polyline points="2 17 12 22 22 17"/>
+                            <polyline points="2 12 12 17 22 12"/>
+                        </svg>
+                    </button>
+                    <button class="btn-icon" id="clearChatBtn" title="Clear Chat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Container -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Welcome Screen -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-avatar">
+                        <div class="avatar-ring">
+                            <div class="avatar-inner">
+                                <svg viewBox="0 0 40 40" fill="none">
+                                    <circle cx="14" cy="16" r="2.5" fill="#7c3aed"/>
+                                    <circle cx="26" cy="16" r="2.5" fill="#7c3aed"/>
+                                    <path d="M10 28 Q20 36 30 28" stroke="#7c3aed" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="avatar-glow"></div>
+                    </div>
+                    <h2 class="welcome-title">Hai! Saya <span class="gradient-text">Adinda</span> 👋</h2>
+                    <p class="welcome-subtitle">Ada yang bisa saya bantu hari ini?</p>
+                    
+                    <div class="suggestion-grid">
+                        <button class="suggestion-card" data-prompt="Jelaskan konsep machine learning dengan sederhana">
+                            <span class="suggestion-icon">🤖</span>
+                            <span>Jelaskan ML</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Buatkan kode Python untuk factorial">
+                            <span class="suggestion-icon">💻</span>
+                            <span>Code Python</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Terjemahkan 'Hello, how are you?' ke Bahasa Indonesia">
+                            <span class="suggestion-icon">🌐</span>
+                            <span>Terjemahkan</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Hitung 125 × 847 + 2345">
+                            <span class="suggestion-icon">🔢</span>
+                            <span>Kalkulator</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Cari informasi tentang React JS">
+                            <span class="suggestion-icon">🔍</span>
+                            <span>Web Search</span>
+                        </button>
+                        <button class="suggestion-card" data-prompt="Buatkan catatan tentang tips productivity">
+                            <span class="suggestion-icon">📝</span>
+                            <span>Notes</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="messages" id="messages"></div>
+
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <div class="typing-avatar">
+                        <svg viewBox="0 0 40 40" fill="none">
+                            <circle cx="14" cy="16" r="2" fill="#7c3aed"/>
+                            <circle cx="26" cy="16" r="2" fill="#7c3aed"/>
+                            <path d="M12 26 Q20 30 28 26" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" fill="none"/>
+                        </svg>
+                    </div>
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span class="typing-text">Adinda sedang mengetik...</span>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <!-- File Preview -->
+                <div class="file-preview" id="filePreview">
+                    <div class="file-preview-content">
+                        <div class="file-preview-icon" id="filePreviewIcon"></div>
+                        <div class="file-preview-info">
+                            <span class="file-preview-name" id="filePreviewName"></span>
+                            <span class="file-preview-size" id="filePreviewSize"></span>
+                        </div>
+                        <button class="btn-remove-file" id="removeFileBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-wrapper">
+                    <div class="input-container">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Ketik pesan untuk Adinda..."<span class="hljs-params">rows="1"</span>
+                            autocomplete="off"
+                        ></textarea>
+                        <div class="input-actions">
+                            <button class="btn-input-action" id="attachFileBtn" title="Lampirkan file">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                                </svg>
+                            </button>
+                            <button class="btn-input-action" id="voiceBtn" title="Input suara">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                    <line x1="12" y1="19" x2="12" y2="23"/>
+                                    <line x1="8" y1="23" x2="16" y2="23"/>
+                                </svg>
+                            </button>
+                            <button class="btn-send" id="sendBtn" title="Kirim">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <p class="input-hint">Tekan <kbd>Enter</kbd> untuk kirim, <kbd>Shift</kbd>+<kbd>Enter</kbd> untuk baris baru</p>
+                
+                <!-- Voice Status -->
+                <div class="voice-status" id="voiceStatus">
+                    <span class="voice-wave">
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </span>
+                    <span id="voiceText">Mendengarkan...</span>
+                    <button class="btn-stop-voice" id="stopVoiceBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="6" width="12" height="12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" accept=".txt,.pdf,.md,.json,.csv,.png,.jpg,.jpeg,.gif,.webp" hidden>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-backdrop" id="settingsBackdrop"></div>
+        <div class="modal-content settings-content">
+            <div class="modal-header">
+                <h3>⚙️ Pengaturan</h3>
+                <button class="btn-close-modal" id="closeSettingsBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- API Configuration -->
+                <div class="settings-section">
+                    <h4>🤖 API Configuration</h4>
+                    <div class="form-group">
+                        <label>Provider</label>
+                        <select id="apiProvider">
+                            <option value="openrouter">OpenRouter</option>
+                            <option value="openai">OpenAI</option>
+                            <option value="anthropic">Anthropic</option>
+                            <option value="groq">Groq</option>
+                            <option value="ollama">Ollama (Local/Cloud)</option>
+                            <option value="custom">Custom API</option>
+                        </select>
+                    </div>
+                    
+                    <!-- OpenRouter Models -->
+                    <div class="form-group model-options" id="openrouterModels">
+                        <label>Model</label>
+                        <select id="openrouterModelSelect">
+                            <option value="anthropic/claude-3-haiku-20240307">Claude 3 Haiku (Fast)</option>
+                            <option value="anthropic/claude-3-sonnet-20240229">Claude 3 Sonnet</option>
+                            <option value="google/gemini-pro-1.5">Gemini Pro</option>
+                            <option value="mistralai/mistral-7b-instruct">Mistral 7B</option>
+                            <option value="meta-llama/llama-3-8b-instruct">Llama 3 8B</option>
+                            <option value="openai/chatgpt-4o-latest">GPT-4o</option>
+                            <option value="openai/gpt-4o-mini">GPT-4o Mini</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Ollama Settings -->
+                    <div class="settings-subsection" id="ollamaSettings" style="display:none;">
+                        <div class="form-group">
+                            <label>Ollama URL</label>
+                            <input type="text" id="ollamaUrl" placeholder="http://localhost:11434">
+                            <small class="form-hint">Local: localhost:11434 | Cloud: https://xxx.ollama.cloud</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Model</label>
+                            <select id="ollamaModelSelect">
+                                <option value="llama3.2">llama3.2</option>
+                                <option value="llama3.1">llama3.1</option>
+                                <option value="llama3">llama3</option>
+                                <option value="mistral">mistral</option>
+                                <option value="codellama">codellama</option>
+                                <option value="phi3">phi3</option>
+                                <option value="qwen2.5">qwen2.5</option>
+                                <option value="deepseek-r1">deepseek-r1</option>
+                                <option value="gemma2">gemma2</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="customModelGroup" style="display:none;">
+                            <label>Nama Custom Model</label>
+                            <input type="text" id="customModelInput" placeholder="nama-model">
+                        </div>
+                        <button class="btn-secondary btn-sm" id="testOllamaBtn">
+                            🔗 Test Koneksi
+                        </button>
+                        <span class="connection-status" id="ollamaStatus"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>API Key</label>
+                        <div class="input-with-toggle">
+                            <input type="password" id="apiKeyInput" placeholder="Masukkan API key...">
+                            <button class="btn-toggle-password" id="toggleApiKey">
+                                <svg class="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                                <svg class="eye-off-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group custom-url-group" id="customUrlGroup" style="display:none;">
+                        <label>Base URL (Custom API)</label>
+                        <input type="text" id="baseUrlInput" placeholder="https://api.example.com/v1">
+                    </div>
+                </div>
+
+                <!-- Appearance -->
+                <div class="settings-section">
+                    <h4>🎨 Tampilan</h4>
+                    <div class="form-group">
+                        <label>Tema</label>
+                        <div class="theme-options">
+                            <button class="theme-option active" data-theme="dark">
+                                <span class="theme-preview dark"></span>
+                                <span>Gelap</span>
+                            </button>
+                            <button class="theme-option" data-theme="light">
+                                <span class="theme-preview light"></span>
+                                <span>Terang</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Management -->
+                <div class="settings-section">
+                    <h4>💾 Kelola Data</h4>
+                    <div class="settings-actions">
+                        <button class="btn-settings-action" id="exportDataBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Export Chat
+                        </button>
+                        <button class="btn-settings-action" id="importDataBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Import Chat
+                        </button>
+                        <button class="btn-settings-action danger" id="clearDataBtn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Hapus Semua Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelSettingsBtn">Batal</button>
+                <button class="btn-primary" id="saveSettingsBtn">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skills Modal -->
+    <div class="modal" id="skillsModal">
+        <div class="modal-backdrop" id="skillsBackdrop"></div>
+        <div class="modal-content skills-content">
+            <div class="modal-header">
+                <h3>🛠️ Skill Manager</h3>
+                <button class="btn-close-modal" id="closeSkillsBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="skills-grid" id="skillsGrid">
+                    <!-- Skills will be rendered here -->
+                </div>
+                <div class="skill-install">
+                    <h4>📦 Install Skill dari URL</h4>
+                    <div class="install-form">
+                        <input type="text" id="skillUrlInput" placeholder="https://raw.githubusercontent.com/...">
+                        <button class="btn-install" id="installSkillBtn">Install</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Todo Modal -->
+    <div class="modal" id="todoModal">
+        <div class="modal-backdrop" id="todoBackdrop"></div>
+        <div class="modal-content todo-content">
+            <div class="modal-header">
+                <h3>✅ Todo & Notes</h3>
+                <button class="btn-close-modal" id="closeTodoBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="todo-tabs">
+                    <button class="todo-tab active" data-tab="todo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"/>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                        </svg>
+                        Daftar Tugas
+                    </button>
+                    <button class="todo-tab" data-tab="notes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        Catatan
+                    </button>
+                </div>
+                <div class="todo-content-area">
+                    <!-- Todo Tab -->
+                    <div class="todo-tab-content" id="todoTabContent">
+                        <div class="todo-input-wrapper">
+                            <input type="text" id="todoInput" placeholder="Tambah tugas baru...">
+                            <button class="btn-add-todo" id="addTodoBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <ul class="todo-list" id="todoList"></ul>
+                        <div class="todo-stats" id="todoStats">
+                            <span id="completedCount">0</span> dari <span id="totalCount">0</span> selesai
+                        </div>
+                    </div>
+                    <!-- Notes Tab -->
+                    <div class="notes-tab-content" id="notesTabContent" style="display:none;">
+                        <textarea id="notesTextarea" placeholder="Tulis catatan di sini...&#10;&#10;Catatan akan otomatis tersimpan."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/build/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>pdfjsLib = window.pdfjsLib || {}; pdfjsLib.GlobalWorkerOptions = {}; </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+    <script src="skills.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
