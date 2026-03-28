@@ -14,23 +14,31 @@
         }
 
         :root {
-            --primary: #1a365d;
-            --primary-light: #2c5282;
-            --accent: #38b2ac;
-            --accent-light: #81e6d9;
-            --bg: #ffffff;
-            --bg-alt: #f7fafc;
-            --text: #2d3748;
+            /* Lombok Tengah Colors */
+            --green-dark: #1B5E20;
+            --green-primary: #2E7D32;
+            --green-light: #4CAF50;
+            --green-pale: #81C784;
+            --green-very-light: #E8F5E9;
+            
+            --gold-dark: #FF8F00;
+            --gold-primary: #FFB300;
+            --gold-light: #FFD54F;
+            --gold-pale: #FFF8E1;
+            
+            --red-accent: #D32F2F;
+            --text-dark: #1a1a2e;
+            --text-medium: #4a4a5a;
             --text-light: #718096;
-            --border: #e2e8f0;
-            --success: #48bb78;
-            --warning: #ed8936;
+            --bg-white: #ffffff;
+            --bg-light: #fafcfa;
+            --border-light: #e8e8e8;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg-alt);
-            color: var(--text);
+            background: linear-gradient(180deg, #f5f7f5 0%, #e8ebe8 100%);
+            color: var(--text-dark);
             line-height: 1.6;
         }
 
@@ -38,26 +46,42 @@
         .slide {
             width: 100%;
             min-height: 100vh;
-            background: var(--bg);
-            padding: 60px 80px;
+            background: var(--bg-white);
+            padding: 50px 70px;
             display: flex;
             flex-direction: column;
             position: relative;
             page-break-after: always;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
 
         .slide:last-child {
             page-break-after: auto;
         }
 
+        /* DECORATIVE ELEMENTS */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--green-dark) 0%, var(--gold-primary) 50%, var(--green-dark) 100%);
+        }
+
         /* HEADER */
         .slide-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 40px;
+            align-items: center;
+            margin-bottom: 35px;
             padding-bottom: 20px;
-            border-bottom: 3px solid var(--primary);
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(var(--bg-white), var(--bg-white)) padding-box,
+                        linear-gradient(90deg, var(--green-primary), var(--gold-primary)) border-box;
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, var(--green-primary), var(--gold-primary)) 1;
         }
 
         .logo-area {
@@ -67,33 +91,46 @@
         }
 
         .logo-area img {
-            width: 60px;
-            height: 60px;
-            border-radius: 8px;
+            width: 65px;
+            height: 65px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(27, 94, 32, 0.2);
+            padding: 5px;
+            background: var(--bg-white);
+            border: 2px solid var(--green-primary);
         }
 
         .logo-text {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--text-light);
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .logo-text strong {
             display: block;
-            font-size: 0.85rem;
-            color: var(--primary);
+            font-size: 1rem;
+            color: var(--green-dark);
+            font-weight: 700;
         }
 
         .slide-meta {
             text-align: right;
+        }
+
+        .slide-meta .label {
             font-size: 0.75rem;
             color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .slide-number {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            color: var(--accent);
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-top: 5px;
         }
 
@@ -104,21 +141,47 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            min-height: calc(100vh - 120px);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            min-height: calc(100vh - 100px);
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-primary) 40%, var(--green-light) 100%);
             color: white;
-            margin: -60px -80px;
+            margin: -50px -70px;
             padding: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-cover::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,179,0,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .slide-cover::before {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
         }
 
         .cover-logo {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             background: white;
             border-radius: 50%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 0 8px rgba(255,179,0,0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .cover-logo img {
@@ -129,45 +192,72 @@
         }
 
         .cover-badge {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
             color: white;
-            padding: 8px 24px;
+            padding: 10px 30px;
             border-radius: 30px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
+            margin-bottom: 35px;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 20px rgba(255,179,0,0.4);
+            position: relative;
+            z-index: 1;
         }
 
         .cover-title {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 800;
             line-height: 1.2;
             margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
         }
 
         .cover-subtitle {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 300;
-            opacity: 0.9;
-            margin-bottom: 10px;
+            opacity: 0.95;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover-year {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
         }
 
         .cover-date {
             font-size: 1.1rem;
             font-weight: 400;
-            opacity: 0.8;
-            margin-top: 40px;
+            opacity: 0.9;
+            margin-top: 50px;
+            padding: 15px 40px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
         }
 
         .cover-footer {
             position: absolute;
             bottom: 40px;
-            font-size: 0.85rem;
-            opacity: 0.7;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            z-index: 1;
         }
 
-        /* CONTENT AREA */
+        /* CONTENT */
         .slide-content {
             flex: 1;
             display: flex;
@@ -175,16 +265,28 @@
         }
 
         .content-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--green-dark);
             margin-bottom: 8px;
         }
 
+        .content-title::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 30px;
+            background: linear-gradient(180deg, var(--gold-primary), var(--gold-dark));
+            border-radius: 3px;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
         .content-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-light);
             margin-bottom: 30px;
+            padding-left: 21px;
         }
 
         /* STATS GRID */
@@ -196,22 +298,35 @@
         }
 
         .stat-card {
-            background: var(--bg-alt);
-            border-radius: 16px;
-            padding: 24px 20px;
+            background: linear-gradient(145deg, var(--bg-white), var(--bg-light));
+            border-radius: 20px;
+            padding: 25px 20px;
             text-align: center;
-            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
         }
 
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--green-primary), var(--gold-primary));
+        }
+
         .stat-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(27,94,32,0.15);
         }
 
         .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
         }
 
         .stat-label {
@@ -219,48 +334,89 @@
             color: var(--text-light);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-weight: 500;
         }
 
         .stat-value {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--green-dark);
+            margin-bottom: 8px;
+        }
+
+        .stat-value.gold {
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .stat-change {
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 4px 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 5px 15px;
             border-radius: 20px;
             display: inline-block;
         }
 
         .stat-change.positive {
-            background: #c6f6d5;
-            color: #276749;
+            background: linear-gradient(135deg, var(--green-pale), var(--green-very-light));
+            color: var(--green-dark);
         }
 
         .stat-change.negative {
-            background: #fed7d7;
-            color: #c53030;
+            background: linear-gradient(135deg, #ffcdd2, #ffebee);
+            color: var(--red-accent);
         }
 
-        /* CHART AREA */
+        /* PROGRESS BAR */
+        .progress-container {
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--border-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green-primary), var(--gold-primary));
+            border-radius: 5px;
+            transition: width 1.5s ease;
+        }
+
+        /* CHART SECTION */
         .chart-section {
             flex: 1;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 25px;
             margin-top: auto;
         }
 
         .chart-card {
-            background: var(--bg-alt);
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid var(--border);
+            background: linear-gradient(145deg, var(--bg-white), var(--bg-light));
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .chart-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--green-primary), var(--gold-primary));
+            border-radius: 0 0 3px 3px;
         }
 
         .chart-card.full {
@@ -268,21 +424,24 @@
         }
 
         .chart-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .chart-title::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 2px;
+        .chart-title .icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, var(--green-very-light), var(--gold-pale));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
         }
 
         .chart-container {
@@ -294,141 +453,90 @@
             height: 220px;
         }
 
-        /* TABLE */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.8rem;
-            margin-top: 15px;
-        }
-
-        .data-table th {
-            background: var(--primary);
-            color: white;
-            padding: 12px 15px;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .data-table th:first-child {
-            border-radius: 8px 0 0 0;
-        }
-
-        .data-table th:last-child {
-            border-radius: 0 8px 0 0;
-        }
-
-        .data-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .data-table tr:hover td {
-            background: var(--bg-alt);
-        }
-
-        .data-table .number {
-            font-family: 'Plus Jakarta Sans', monospace;
-            text-align: right;
-        }
-
-        .data-table .highlight {
-            background: #ebf8ff;
-            font-weight: 600;
-        }
-
-        /* PERCENTAGE BAR */
-        .percent-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-
-        .percent-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 1s ease;
-        }
-
-        .percent-fill.high {
-            background: linear-gradient(90deg, var(--success), #68d391);
-        }
-
-        .percent-fill.medium {
-            background: linear-gradient(90deg, var(--warning), #fbd38d);
-        }
-
-        .percent-fill.low {
-            background: linear-gradient(90deg, #fc8181, #feb2b2);
-        }
-
-        /* TAX SLIDE */
+        /* TAX SLIDE HEADER */
         .tax-slide-header {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 25px;
+            flex-wrap: wrap;
         }
 
         .tax-badge {
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
             color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
+            padding: 12px 25px;
+            border-radius: 15px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 20px rgba(27,94,32,0.3);
         }
 
         .tax-target {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--text-light);
         }
 
         .tax-target strong {
-            color: var(--primary);
-            font-size: 1.1rem;
+            color: var(--gold-dark);
+            font-size: 1.2rem;
+            display: block;
+            margin-top: 3px;
         }
 
+        /* TAX SUMMARY */
         .tax-summary {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 20px;
             margin-bottom: 25px;
         }
 
         .tax-summary-item {
-            background: var(--bg-alt);
-            border-radius: 12px;
-            padding: 20px;
+            background: linear-gradient(145deg, var(--bg-white), var(--bg-light));
+            border-radius: 18px;
+            padding: 22px;
             text-align: center;
-            border: 1px solid var(--border);
+            border: 2px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
         }
 
         .tax-summary-item.highlight {
-            background: linear-gradient(135deg, #ebf8ff, #bee3f8);
-            border-color: var(--accent);
+            background: linear-gradient(145deg, var(--gold-pale), #fff);
+            border-color: var(--gold-primary);
+            box-shadow: 0 5px 25px rgba(255,179,0,0.2);
+        }
+
+        .tax-summary-item.highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-primary), var(--gold-dark));
         }
 
         .tax-summary-label {
             font-size: 0.75rem;
             color: var(--text-light);
-            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
         }
 
         .tax-summary-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--green-dark);
         }
 
         .tax-summary-item.highlight .tax-summary-value {
-            color: var(--accent);
+            color: var(--gold-dark);
         }
 
-        /* GRID FOR TAX SLIDE */
+        /* TAX CHART GRID */
         .tax-chart-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -436,15 +544,128 @@
             flex: 1;
         }
 
+        /* TABLE */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, var(--green-dark), var(--green-primary));
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table th:first-child {
+            padding-left: 20px;
+        }
+
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-white);
+        }
+
+        .data-table td:first-child {
+            padding-left: 20px;
+        }
+
+        .data-table tbody tr:hover td {
+            background: linear-gradient(90deg, var(--green-very-light), var(--gold-pale));
+        }
+
+        .data-table .number {
+            font-family: 'Plus Jakarta Sans', monospace;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .data-table .highlight {
+            background: linear-gradient(90deg, var(--gold-pale), #fff) !important;
+            font-weight: 600;
+        }
+
+        .data-table .highlight td:first-child {
+            border-left: 4px solid var(--gold-primary);
+        }
+
         /* FOOTER */
         .slide-footer {
             margin-top: auto;
             padding-top: 20px;
-            border-top: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
-            font-size: 0.75rem;
+            align-items: center;
+            font-size: 0.8rem;
             color: var(--text-light);
+        }
+
+        .slide-footer span:first-child {
+            font-weight: 600;
+            color: var(--green-dark);
+        }
+
+        /* LOADING */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--green-dark), var(--green-primary));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+        }
+
+        .loading-logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            padding: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .loading-logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: var(--gold-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         /* PRINT STYLES */
@@ -464,14 +685,13 @@
                 width: 100%;
                 height: 100vh;
                 margin: 0;
-                padding: 40px 50px;
+                padding: 35px 50px;
                 box-shadow: none;
                 page-break-after: always;
-                page-break-inside: avoid;
             }
 
             .slide-cover {
-                margin: -40px -50px;
+                margin: -35px -50px;
                 padding: 60px;
             }
 
@@ -484,52 +704,21 @@
             .chart-container.small {
                 height: 220px !important;
             }
-        }
 
-        /* LOADING */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .hidden {
-            display: none;
+            .loading-overlay {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Loading -->
     <div class="loading-overlay" id="loading">
+        <div class="loading-logo">
+            <img src="https://lomboktengahkab.go.id/uploads/images/LOGO_KABUPATEN_LOMBOK_TENGAH.png" alt="Logo">
+        </div>
         <div class="loading-spinner"></div>
-        <p class="loading-text">Memuat data...</p>
+        <p class="loading-text">Memuat data presentasi...</p>
     </div>
 
     <!-- SLIDE 1: COVER -->
@@ -538,8 +727,9 @@
             <img src="https://lomboktengahkab.go.id/uploads/images/LOGO_KABUPATEN_LOMBOK_TENGAH.png" alt="Logo Lombok Tengah">
         </div>
         <div class="cover-badge">📊 LAPORAN REALISASI</div>
-        <h1 class="cover-title">Realisasi Pendapatan Asli Daerah<br>Kabupaten Lombok Tengah</h1>
-        <p class="cover-subtitle">Tahun Anggaran 2026</p>
+        <h1 class="cover-title">Realisasi Pendapatan Asli Daerah</h1>
+        <p class="cover-subtitle">Kabupaten Lombok Tengah</p>
+        <div class="cover-year">TAHUN 2026</div>
         <p class="cover-date">📅 Periode: Januari - 27 Maret 2026</p>
         <div class="cover-footer">
             💼 Badan Pendapatan Daerah Kabupaten Lombok Tengah
@@ -557,37 +747,39 @@
                 </div>
             </div>
             <div class="slide-meta">
-                Periode Januari - Maret 2026
+                <span class="label">Overview</span>
                 <div class="slide-number">02</div>
             </div>
         </div>
 
         <div class="slide-content">
-            <h2 class="content-title">📊 Capaian Realisasi Pajak Daerah</h2>
-            <p class="content-subtitle">Perbandingan dengan tahun 2025 sampai dengan periode yang sama</p>
+            <h2 class="content-title">Capaian Realisasi Pajak Daerah</h2>
+            <p class="content-subtitle">Perbandingan dengan tahun sebelumnya sampai periode yang sama</p>
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon">💰</div>
+                    <div class="stat-icon">🎯</div>
                     <div class="stat-label">Target 2026</div>
                     <div class="stat-value" id="totalTarget">-</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">📈</div>
-                    <div class="stat-label">Realisasi S/D Mar 2026</div>
-                    <div class="stat-value" id="totalRealisasi">-</div>
+                    <div class="stat-label">Realisasi S/D Mar</div>
+                    <div class="stat-value gold" id="totalRealisasi">-</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">✅</div>
                     <div class="stat-label">Persentase Capaian</div>
                     <div class="stat-value" id="totalPersen">-</div>
-                    <div class="percent-bar">
-                        <div class="percent-fill" id="percentBar"></div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="percentBar"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">📊</div>
-                    <div class="stat-label">vs Periode Sama 2025</div>
+                    <div class="stat-label">vs 2025</div>
                     <div class="stat-value" id="totalGrowth">-</div>
                     <span class="stat-change positive" id="growthBadge">+0%</span>
                 </div>
@@ -595,14 +787,20 @@
 
             <div class="chart-section">
                 <div class="chart-card">
-                    <div class="chart-title">Perbandingan Realisasi Per Bulan</div>
+                    <div class="chart-title">
+                        <span class="icon">📊</span>
+                        Realisasi Per Bulan
+                    </div>
                     <div class="chart-container">
                         <canvas id="chartMonthly"></canvas>
                     </div>
                 </div>
                 <div class="chart-card">
-                    <div class="chart-title">Perbandingan dengan 2025</div>
-                    <div class="chart-container small">
+                    <div class="chart-title">
+                        <span class="icon">📉</span>
+                        Perbandingan 2025 vs 2026
+                    </div>
+                    <div class="chart-container">
                         <canvas id="chartComparison"></canvas>
                     </div>
                 </div>
@@ -610,15 +808,15 @@
         </div>
 
         <div class="slide-footer">
-            <span>BAPENDA Kabupaten Lombok Tengah</span>
-            <span>Realisasi PAD Tahun 2026</span>
+            <span>BAPENDA Lombok Tengah</span>
+            <span>Realisasi PAD 2026</span>
         </div>
     </div>
 
-    <!-- TAX SLIDES WILL BE GENERATED HERE -->
+    <!-- TAX SLIDES -->
     <div id="taxSlides"></div>
 
-    <!-- SLIDE: SUMMARY TABLE -->
+    <!-- SLIDE: SUMMARY -->
     <div class="slide">
         <div class="slide-header">
             <div class="logo-area">
@@ -629,13 +827,13 @@
                 </div>
             </div>
             <div class="slide-meta">
-                Periode Januari - Maret 2026
+                <span class="label">Rekapitulasi</span>
                 <div class="slide-number" id="lastSlideNumber">99</div>
             </div>
         </div>
 
         <div class="slide-content">
-            <h2 class="content-title">📋 Rekapitulasi Realisasi Pajak Daerah</h2>
+            <h2 class="content-title">Rekapitulasi Realisasi Pajak Daerah</h2>
             <p class="content-subtitle">Detail per jenis pajak sampai dengan 27 Maret 2026</p>
 
             <table class="data-table">
@@ -651,52 +849,53 @@
                         <th>%</th>
                     </tr>
                 </thead>
-                <tbody id="summaryTable">
-                    <!-- Generated by JS -->
-                </tbody>
+                <tbody id="summaryTable"></tbody>
             </table>
         </div>
 
         <div class="slide-footer">
-            <span>BAPENDA Kabupaten Lombok Tengah</span>
-            <span>Realisasi PAD Tahun 2026</span>
+            <span>BAPENDA Lombok Tengah</span>
+            <span>Realisasi PAD 2026</span>
         </div>
     </div>
 
     <!-- SLIDE: CLOSING -->
     <div class="slide" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-        <div class="cover-logo" style="margin-bottom: 40px;">
+        <div class="cover-logo" style="margin-bottom: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
             <img src="https://lomboktengahkab.go.id/uploads/images/LOGO_KABUPATEN_LOMBOK_TENGAH.png" alt="Logo Lombok Tengah">
         </div>
-        <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 15px;">Terima Kasih</h2>
-        <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 30px;">Atas perhatian dan dukungan всех pihak dalam pengelolaan Pajak Daerah</p>
+        <h2 style="font-size: 2.5rem; font-weight: 800; color: var(--green-dark); margin-bottom: 15px;">Terima Kasih</h2>
+        <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 40px; max-width: 500px;">
+            Atas perhatian dan dukungan dalam pengelolaan Pajak Daerah Kabupaten Lombok Tengah
+        </p>
         
-        <div style="background: var(--bg-alt); border-radius: 16px; padding: 30px 50px; border: 1px solid var(--border);">
-            <p style="font-weight: 600; color: var(--primary); margin-bottom: 5px;">💼 Badan Pendapatan Daerah</p>
-            <p style="color: var(--text-light); font-size: 0.9rem;">Kabupaten Lombok Tengah</p>
-            <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 10px;">📅 Maret 2026</p>
+        <div style="background: linear-gradient(145deg, var(--green-very-light), var(--gold-pale)); border-radius: 20px; padding: 35px 60px; border: 2px solid var(--green-light); box-shadow: 0 10px 40px rgba(27,94,32,0.15);">
+            <p style="font-weight: 700; color: var(--green-dark); font-size: 1.1rem; margin-bottom: 5px;">💼 Badan Pendapatan Daerah</p>
+            <p style="color: var(--text-medium); font-size: 0.95rem;">Kabupaten Lombok Tengah</p>
+            <p style="color: var(--gold-dark); font-size: 0.9rem; margin-top: 15px; font-weight: 600;">📅 Maret 2026</p>
         </div>
 
-        <div class="slide-footer" style="position: absolute; bottom: 30px; width: calc(100% - 160px);">
-            <span>BAPENDA Kabupaten Lombok Tengah</span>
-            <span>Realisasi PAD Tahun 2026</span>
+        <div class="slide-footer" style="position: absolute; bottom: 30px; width: calc(100% - 140px);">
+            <span style="color: var(--green-dark);">BAPENDA Lombok Tengah</span>
+            <span>Realisasi PAD 2026</span>
         </div>
     </div>
 
     <script>
-        // ==================== CONFIGURATION ====================
+        // ==================== CONFIG ====================
         const SHEET_ID = '1BE7gPYSSlCnaIZ4Q7RvGx_L_2v46fQjkEnK3EC3VQz4';
         const GID_2026 = '0';
         const GID_2025 = '757965445';
 
-        // Month names
-        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        const shortMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-
-        // Data storage
         let data2026 = [];
         let data2025 = [];
-        let charts = {};
+
+        // Lombok Tengah Color Palette for Charts
+        const chartColors = {
+            green: ['#1B5E20', '#2E7D32', '#4CAF50', '#81C784', '#A5D6A7'],
+            gold: ['#FF8F00', '#FFB300', '#FFD54F', '#FFE082', '#FFF8E1'],
+            gray: ['#546E7A', '#78909C', '#90A4AE', '#B0BEC5', '#CFD8DC']
+        };
 
         // ==================== FORMATTERS ====================
         function formatRupiah(num) {
@@ -715,16 +914,9 @@
         // ==================== FETCH DATA ====================
         async function fetchSheetData(gid) {
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${gid}`;
-            
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('Network error');
-                const csv = await response.text();
-                return parseCSV(csv);
-            } catch (error) {
-                console.error('Error:', error);
-                throw error;
-            }
+            const response = await fetch(url);
+            const csv = await response.text();
+            return parseCSV(csv);
         }
 
         function parseCSV(csv) {
@@ -758,12 +950,10 @@
                     bulan: []
                 };
                 
-                // Months: index 2-13 (Jan-Des)
                 for (let j = 2; j <= 13; j++) {
                     row.bulan.push(parseFloat(values[j]) || 0);
                 }
                 
-                // Total & Percentage from spreadsheet
                 row.total = parseFloat(values[14]) || 0;
                 row.persen = parseFloat(values[15]) || 0;
                 
@@ -783,8 +973,7 @@
                 document.getElementById('loading').classList.add('hidden');
                 initSlides();
             } catch (error) {
-                console.error('Failed to load:', error);
-                document.querySelector('.loading-text').textContent = 'Error loading data. Please refresh.';
+                console.error('Error:', error);
             }
         }
 
@@ -816,13 +1005,11 @@
         }
 
         function generateOverviewStats() {
-            const currentMonth = 2; // Maret (0-indexed)
-            
+            const currentMonth = 2;
             const totalTarget = getTotalTarget(data2026);
             const totalUntilMarch = getTotalUntilMonth(data2026, currentMonth);
             const percent = totalTarget > 0 ? (totalUntilMarch / totalTarget * 100) : 0;
             
-            // Compare with 2025
             const total2025 = getTotalUntilMonth(data2025, currentMonth);
             const growth = total2025 > 0 ? ((totalUntilMarch - total2025) / total2025 * 100) : 0;
             
@@ -830,20 +1017,17 @@
             document.getElementById('totalRealisasi').textContent = formatRupiah(totalUntilMarch);
             document.getElementById('totalPersen').textContent = percent.toFixed(2) + '%';
             
-            const percentBar = document.getElementById('percentBar');
-            percentBar.style.width = Math.min(percent, 100) + '%';
-            percentBar.className = 'percent-fill ' + (percent >= 50 ? 'high' : percent >= 25 ? 'medium' : 'low');
+            document.getElementById('percentBar').style.width = Math.min(percent, 100) + '%';
             
             document.getElementById('totalGrowth').textContent = (growth >= 0 ? '+' : '') + growth.toFixed(1) + '%';
-            const growthBadge = document.getElementById('growthBadge');
-            growthBadge.textContent = (growth >= 0 ? '↑' : '↓') + ' ' + Math.abs(growth).toFixed(1) + '%';
-            growthBadge.className = 'stat-change ' + (growth >= 0 ? 'positive' : 'negative');
+            const badge = document.getElementById('growthBadge');
+            badge.textContent = (growth >= 0 ? '↑' : '↓') + ' ' + Math.abs(growth).toFixed(1) + '%';
+            badge.className = 'stat-change ' + (growth >= 0 ? 'positive' : 'negative');
         }
 
         function generateCharts() {
-            // Monthly Chart
-            const ctx1 = document.getElementById('chartMonthly').getContext('2d');
-            new Chart(ctx1, {
+            // Monthly Bar Chart
+            new Chart(document.getElementById('chartMonthly'), {
                 type: 'bar',
                 data: {
                     labels: ['Januari', 'Februari', 'Maret'],
@@ -851,16 +1035,18 @@
                         {
                             label: '2025',
                             data: [0, 1, 2].map(i => getMonthTotal(data2025, i)),
-                            backgroundColor: 'rgba(160, 174, 192, 0.8)',
+                            backgroundColor: 'rgba(46, 125, 50, 0.5)',
+                            borderColor: '#2E7D32',
+                            borderWidth: 2,
                             borderRadius: 8,
-                            borderSkipped: false,
                         },
                         {
                             label: '2026',
                             data: [0, 1, 2].map(i => getMonthTotal(data2026, i)),
-                            backgroundColor: 'rgba(56, 178, 172, 0.8)',
+                            backgroundColor: 'rgba(255, 179, 0, 0.7)',
+                            borderColor: '#FF8F00',
+                            borderWidth: 2,
                             borderRadius: 8,
-                            borderSkipped: false,
                         }
                     ]
                 },
@@ -870,52 +1056,33 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 20,
-                                font: { size: 11 }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: ctx => ctx.dataset.label + ': ' + formatRupiah(ctx.raw)
-                            }
+                            labels: { usePointStyle: true, padding: 20 }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                callback: v => formatNumber(v)
-                            },
-                            grid: {
-                                color: 'rgba(0,0,0,0.05)'
-                            }
+                            ticks: { callback: v => formatNumber(v) },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
                         },
-                        x: {
-                            grid: { display: false }
-                        }
+                        x: { grid: { display: false } }
                     }
                 }
             });
 
-            // Comparison Pie/Donut
-            const ctx2 = document.getElementById('chartComparison').getContext('2d');
+            // Comparison Doughnut
             const total2025 = getTotalUntilMonth(data2025, 2);
             const total2026 = getTotalUntilMonth(data2026, 2);
             
-            new Chart(ctx2, {
+            new Chart(document.getElementById('chartComparison'), {
                 type: 'doughnut',
                 data: {
                     labels: ['2025', '2026'],
                     datasets: [{
                         data: [total2025, total2026],
-                        backgroundColor: [
-                            'rgba(160, 174, 192, 0.9)',
-                            'rgba(56, 178, 172, 0.9)'
-                        ],
+                        backgroundColor: ['#2E7D32', '#FFB300'],
                         borderWidth: 0,
-                        hoverOffset: 10
+                        hoverOffset: 15
                     }]
                 },
                 options: {
@@ -925,16 +1092,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 15,
-                                font: { size: 11 }
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: ctx => ctx.label + ': ' + formatRupiah(ctx.raw)
-                            }
+                            labels: { usePointStyle: true, padding: 15 }
                         }
                     }
                 }
@@ -943,21 +1101,16 @@
 
         function generateTaxSlides() {
             const container = document.getElementById('taxSlides');
-            const currentMonth = 2; // Maret
-            
             let slideNum = 3;
             
-            // Filter only taxes with data
             const validTaxes = data2026.filter(item => item.target > 0 || item.total > 0);
             
             validTaxes.forEach((item, idx) => {
                 const item2025 = data2025.find(i => i.name === item.name) || { bulan: [0,0,0,0,0,0,0,0,0,0,0,0] };
                 
-                // Calculate values
                 const totalUntilMarch = [0,1,2].reduce((sum, i) => sum + (item.bulan[i] || 0), 0);
                 const percent = item.target > 0 ? (totalUntilMarch / item.target * 100) : 0;
                 
-                // Growth
                 const total2025 = [0,1,2].reduce((sum, i) => sum + (item2025.bulan[i] || 0), 0);
                 const growth = total2025 > 0 ? ((totalUntilMarch - total2025) / total2025 * 100) : 0;
                 
@@ -973,7 +1126,7 @@
                             </div>
                         </div>
                         <div class="slide-meta">
-                            Pajak Daerah
+                            <span class="label">Detail Pajak</span>
                             <div class="slide-number">${String(slideNum).padStart(2, '0')}</div>
                         </div>
                     </div>
@@ -981,7 +1134,10 @@
                     <div class="slide-content">
                         <div class="tax-slide-header">
                             <div class="tax-badge">${item.name}</div>
-                            <div class="tax-target">Target Tahun 2026: <strong>${formatRupiah(item.target)}</strong></div>
+                            <div class="tax-target">
+                                Target Tahun 2026
+                                <strong>${formatRupiah(item.target)}</strong>
+                            </div>
                         </div>
 
                         <div class="tax-summary">
@@ -994,21 +1150,29 @@
                                 <div class="tax-summary-value">${percent.toFixed(2)}%</div>
                             </div>
                             <div class="tax-summary-item">
-                                <div class="tax-summary-label">vs Periode Sama 2025</div>
-                                <div class="tax-summary-value" style="color: ${growth >= 0 ? '#38a169' : '#e53e3e'}">${growth >= 0 ? '+' : ''}${growth.toFixed(1)}%</div>
+                                <div class="tax-summary-label">vs 2025</div>
+                                <div class="tax-summary-value" style="color: ${growth >= 0 ? '#2E7D32' : '#D32F2F'}">
+                                    ${growth >= 0 ? '+' : ''}${growth.toFixed(1)}%
+                                </div>
                             </div>
                         </div>
 
                         <div class="tax-chart-grid">
                             <div class="chart-card">
-                                <div class="chart-title">Realisasi Per Bulan (2025 vs 2026)</div>
+                                <div class="chart-title">
+                                    <span class="icon">📊</span>
+                                    Realisasi Per Bulan
+                                </div>
                                 <div class="chart-container">
                                     <canvas id="chartTax${idx}"></canvas>
                                 </div>
                             </div>
                             <div class="chart-card">
-                                <div class="chart-title">Komposisi Realisasi</div>
-                                <div class="chart-container small">
+                                <div class="chart-title">
+                                    <span class="icon">🥧</span>
+                                    Komposisi
+                                </div>
+                                <div class="chart-container">
                                     <canvas id="chartPie${idx}"></canvas>
                                 </div>
                             </div>
@@ -1016,106 +1180,78 @@
                     </div>
 
                     <div class="slide-footer">
-                        <span>BAPENDA Kabupaten Lombok Tengah</span>
-                        <span>${item.name} - ${formatRupiah(totalUntilMarch)} (${percent.toFixed(1)}%)</span>
+                        <span>BAPENDA Lombok Tengah</span>
+                        <span>${item.name}</span>
                     </div>
                 `;
                 
                 container.appendChild(slide);
                 
-                // Create charts for this slide
+                // Create charts
                 setTimeout(() => {
-                    // Bar Chart
-                    const ctx1 = document.getElementById(`chartTax${idx}`);
-                    if (ctx1) {
-                        new Chart(ctx1, {
-                            type: 'bar',
-                            data: {
-                                labels: ['Januari', 'Februari', 'Maret'],
-                                datasets: [
-                                    {
-                                        label: '2025',
-                                        data: [0,1,2].map(i => item2025.bulan[i] || 0),
-                                        backgroundColor: 'rgba(160, 174, 192, 0.8)',
-                                        borderRadius: 6,
-                                    },
-                                    {
-                                        label: '2026',
-                                        data: [0,1,2].map(i => item.bulan[i] || 0),
-                                        backgroundColor: 'rgba(56, 178, 172, 0.8)',
-                                        borderRadius: 6,
-                                    }
-                                ]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        position: 'bottom',
-                                        labels: { usePointStyle: true, font: { size: 10 } }
-                                    },
-                                    tooltip: {
-                                        callbacks: { label: ctx => ctx.dataset.label + ': ' + formatRupiah(ctx.raw) }
-                                    }
+                    new Chart(document.getElementById(`chartTax${idx}`), {
+                        type: 'bar',
+                        data: {
+                            labels: ['Januari', 'Februari', 'Maret'],
+                            datasets: [
+                                {
+                                    label: '2025',
+                                    data: [0,1,2].map(i => item2025.bulan[i] || 0),
+                                    backgroundColor: 'rgba(46, 125, 50, 0.5)',
+                                    borderColor: '#2E7D32',
+                                    borderWidth: 2,
+                                    borderRadius: 6,
                                 },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        ticks: { callback: v => formatNumber(v) },
-                                        grid: { color: 'rgba(0,0,0,0.05)' }
-                                    },
-                                    x: { grid: { display: false } }
+                                {
+                                    label: '2026',
+                                    data: [0,1,2].map(i => item.bulan[i] || 0),
+                                    backgroundColor: 'rgba(255, 179, 0, 0.7)',
+                                    borderColor: '#FF8F00',
+                                    borderWidth: 2,
+                                    borderRadius: 6,
                                 }
-                            }
-                        });
-                    }
-
-                    // Pie Chart
-                    const ctx2 = document.getElementById(`chartPie${idx}`);
-                    if (ctx2) {
-                        new Chart(ctx2, {
-                            type: 'doughnut',
-                            data: {
-                                labels: ['Januari', 'Februari', 'Maret', 'Sisa'],
-                                datasets: [{
-                                    data: [
-                                        item.bulan[0] || 0,
-                                        item.bulan[1] || 0,
-                                        item.bulan[2] || 0,
-                                        Math.max(0, item.target - totalUntilMarch)
-                                    ],
-                                    backgroundColor: [
-                                        'rgba(56, 178, 172, 0.9)',
-                                        'rgba(56, 178, 172, 0.7)',
-                                        'rgba(56, 178, 172, 0.5)',
-                                        'rgba(226, 232, 240, 0.9)'
-                                    ],
-                                    borderWidth: 0
-                                }]
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom', labels: { usePointStyle: true } }
                             },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                cutout: '55%',
-                                plugins: {
-                                    legend: {
-                                        position: 'bottom',
-                                        labels: { usePointStyle: true, font: { size: 9 }, padding: 8 }
-                                    },
-                                    tooltip: {
-                                        callbacks: { label: ctx => ctx.label + ': ' + formatRupiah(ctx.raw) }
-                                    }
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { callback: v => formatNumber(v) }
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
+
+                    const sisa = Math.max(0, item.target - totalUntilMarch);
+                    new Chart(document.getElementById(`chartPie${idx}`), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Sisa'],
+                            datasets: [{
+                                data: [item.bulan[0], item.bulan[1], item.bulan[2], sisa],
+                                backgroundColor: ['#1B5E20', '#4CAF50', '#81C784', '#E8F5E9'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            cutout: '55%',
+                            plugins: {
+                                legend: { position: 'bottom', labels: { usePointStyle: true, font: { size: 10 } } }
+                            }
+                        }
+                    });
                 }, 100);
                 
                 slideNum++;
             });
             
-            // Update last slide number
             document.getElementById('lastSlideNumber').textContent = String(slideNum).padStart(2, '0');
         }
 
@@ -1129,8 +1265,7 @@
                 const total = [0,1,2].reduce((sum, i) => sum + (item.bulan[i] || 0), 0);
                 const percent = item.target > 0 ? (total / item.target * 100) : 0;
                 
-                let rowClass = '';
-                if (percent >= 100) rowClass = 'highlight';
+                const rowClass = percent >= 25 ? 'highlight' : '';
                 
                 tbody.innerHTML += `
                     <tr class="${rowClass}">
