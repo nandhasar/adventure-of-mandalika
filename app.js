@@ -525,20 +525,20 @@ AppState.sendMessage = async function() {
     const chat = this.chats[this.currentChatId];
     
     // Add user message
-let userContent = content;
-if (this.attachedFile) {
-    userContent += `\n\n**📎 File Dilampirkan:**\n`;
-    userContent += `- Nama: ${this.attachedFile.name}\n`;
-    userContent += `- Tipe: ${this.attachedFile.type.toUpperCase()}\n`;
-    userContent += `- Ukuran: ${FileProcessor.formatFileSize(this.attachedFile.size)}\n`;
-    userContent += `- Kata: ${this.attachedFile.metadata.wordCount}\n\n`;
-    userContent += `**Konten File:**\n\`\`\`\n`;
-    userContent += this.attachedFile.content.substring(0, 3000); // Limit 3000 char
-    if (this.attachedFile.content.length > 3000) {
-        userContent += `\n... (dipotong karena terlalu panjang)\n`;
+    let userContent = content;
+    if (this.attachedFile) {
+        userContent += `\n\n**📎 File Dilampirkan:**\n`;
+        userContent += `- Nama: ${this.attachedFile.name}\n`;
+        userContent += `- Tipe: ${this.attachedFile.type.toUpperCase()}\n`;
+        userContent += `- Ukuran: ${FileProcessor.formatFileSize(this.attachedFile.size)}\n`;
+        userContent += `- Kata: ${this.attachedFile.metadata.wordCount}\n\n`;
+        userContent += `**Konten File:**\n\`\`\`\n`;
+        userContent += this.attachedFile.content.substring(0, 3000); // Limit 3000 char
+        if (this.attachedFile.content.length > 3000) {
+            userContent += `\n... (dipotong karena terlalu panjang)\n`;
+        }
+        userContent += `\`\`\``;
     }
-    userContent += `\`\`\``;
-}
     
     chat.messages.push({
         role: 'user',
@@ -806,9 +806,6 @@ AppState.testOllamaConnection = async function() {
 };
 
 // ==========================================
-// FILE HANDLING
-// ==========================================
-// ==========================================
 // FILE HANDLING - UPDATED
 // ==========================================
 AppState.handleFileUpload = async function(file) {
@@ -825,6 +822,11 @@ AppState.handleFileUpload = async function(file) {
     previewSize.textContent = '';
     
     try {
+        // Check if FileProcessor exists
+        if (typeof FileProcessor === 'undefined') {
+            throw new Error('FileProcessor module tidak ter-load');
+        }
+        
         // Process file menggunakan FileProcessor
         const result = await FileProcessor.process(file);
         
@@ -870,6 +872,13 @@ AppState.handleFileUpload = async function(file) {
         showToast(`✗ Error: ${error.message}`, 'error');
         this.attachedFile = null;
     }
+};
+
+AppState.removeAttachedFile = function() {
+    this.attachedFile = null;
+    const preview = document.getElementById('filePreview');
+    preview.classList.remove('active', 'loading');
+    document.getElementById('fileInput').value = '';
 };
 
 // ==========================================
