@@ -525,10 +525,20 @@ AppState.sendMessage = async function() {
     const chat = this.chats[this.currentChatId];
     
     // Add user message
-    let userContent = content;
-    if (this.attachedFile) {
-        userContent += `\n\n[_File dilampirkan: ${this.attachedFile.name}_]`;
+let userContent = content;
+if (this.attachedFile) {
+    userContent += `\n\n**📎 File Dilampirkan:**\n`;
+    userContent += `- Nama: ${this.attachedFile.name}\n`;
+    userContent += `- Tipe: ${this.attachedFile.type.toUpperCase()}\n`;
+    userContent += `- Ukuran: ${FileProcessor.formatFileSize(this.attachedFile.size)}\n`;
+    userContent += `- Kata: ${this.attachedFile.metadata.wordCount}\n\n`;
+    userContent += `**Konten File:**\n\`\`\`\n`;
+    userContent += this.attachedFile.content.substring(0, 3000); // Limit 3000 char
+    if (this.attachedFile.content.length > 3000) {
+        userContent += `\n... (dipotong karena terlalu panjang)\n`;
     }
+    userContent += `\`\`\``;
+}
     
     chat.messages.push({
         role: 'user',
@@ -798,53 +808,68 @@ AppState.testOllamaConnection = async function() {
 // ==========================================
 // FILE HANDLING
 // ==========================================
-AppState.handleFileUpload = function(file) {
+// ==========================================
+// FILE HANDLING - UPDATED
+// ==========================================
+AppState.handleFileUpload = async function(file) {
     if (!file) return;
-    
-    // Check file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-        showToast('File terlalu besar. Maksimal 10MB.', 'error');
-        return;
-    }
-    
-    this.attachedFile = file;
     
     const preview = document.getElementById('filePreview');
     const previewName = document.getElementById('filePreviewName');
     const previewSize = document.getElementById('filePreviewSize');
     const previewIcon = document.getElementById('filePreviewIcon');
     
-    previewName.textContent = file.name;
-    previewSize.textContent = this.formatFileSize(file.size);
+    // Show loading state
+    preview.classList.add('loading');
+    previewName.textContent = 'Memproses file...';
+    previewSize.textContent = '';
     
-    // Set icon based on file type
-    const ext = file.name.split('.').pop().toLowerCase();
-    const icons = {
-        pdf: '📄',
-        txt: '📝',
-        md: '📝',
-        json: '📋',
-        csv: '📊',
-        png: '🖼️',
-        jpg: '🖼️',
-        jpeg: '🖼️',
-        gif: '🖼️'
-    };
-    previewIcon.textContent = icons[ext] || '📎';
-    
-    preview.classList.add('active');
-};
-
-AppState.removeAttachedFile = function() {
-    this.attachedFile = null;
-    document.getElementById('filePreview').classList.remove('active');
-    document.getElementById('fileInput').value = '';
-};
-
-AppState.formatFileSize = function(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    try {
+        // Process file menggunakan FileProcessor
+        const result = await FileProcessor.process(file);
+        
+        if (!result.success) {
+            throw new Error(result.error);
+        }
+        
+        // Store file data
+        this.attachedFile = {
+            name: result.filename,
+            type: result.type,
+            size: result.size,
+            content: result.content,
+            metadata: {
+                wordCount: result.wordCount,
+                charCount: result.charCount
+            }
+        };
+        
+        // Update preview UI
+        previewName.textContent = result.filename;
+        previewSize.textContent = FileProcessor.formatFileSize(result.size);
+        
+        // Set icon based on type
+        const icons = {
+            pdf: '📄',
+            docx: '📘',
+            xlsx: '📊',
+            xls: '📊',
+            txt: '📝'
+        };
+        previewIcon.textContent = icons[result.type] || '📎';
+        
+        // Update UI
+        preview.classList.remove('loading');
+        preview.classList.add('active');
+        
+        // Show success message
+        showToast(`✓ File "${result.filename}" berhasil diproses`, 'success');
+        
+    } catch (error) {
+        preview.classList.remove('loading');
+        showToast(`✗ Error: ${error.message}`, 'error');
+        this.attachedFile = null;
+    }
 };
 
 // ==========================================
