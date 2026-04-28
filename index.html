@@ -16,9 +16,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
     
-    <!-- ========================================
-         FILE PROCESSING LIBRARIES
-         ======================================== -->
+    <!-- FILE PROCESSING LIBRARIES -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.22/mammoth.browser.min.js"></script>
@@ -218,12 +216,11 @@
                 <div class="input-wrapper">
                     <div class="input-container">
                         <textarea 
-                            <textarea 
-    id="messageInput" 
-    placeholder="Ketik pesan untuk Adinda..."
-    rows="1"
-    autocomplete="off"
-></textarea>
+                            id="messageInput" 
+                            placeholder="Ketik pesan untuk Adinda..."
+                            rows="1"
+                            autocomplete="off"
+                        ></textarea>
                         <div class="input-actions">
                             <button class="btn-input-action" id="attachFileBtn" title="Lampirkan file">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -267,7 +264,7 @@
     </div>
 
     <!-- Hidden File Input -->
-    <input type="file" id="fileInput" accept=".txt,.pdf,.md,.json,.csv,.png,.jpg,.jpeg,.gif,.webp" hidden>
+    <input type="file" id="fileInput" accept=".txt,.pdf,.md,.json,.csv,.png,.jpg,.jpeg,.gif,.webp,.docx,.xlsx,.xls" hidden>
 
     <!-- Settings Modal -->
     <div class="modal" id="settingsModal">
@@ -511,13 +508,15 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
-   <!-- Scripts -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/build/highlight.min.js"></script>
     
     <!-- PDF.js Worker Setup -->
     <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
     </script>
     
     <!-- App Scripts - ORDER PENTING! -->
